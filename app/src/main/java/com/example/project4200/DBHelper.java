@@ -24,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TABLE1_COL4 = "place";
     public static final String TABLE1_COL5 = "time";
     public static final String TABLE1_COL6 = "id_picture";
+
     public static final String TABLE2_NAME = "picture_table";
     public static final String TABLE2_COL1 = "id";
     public static final String TABLE2_COL2 = "name";
