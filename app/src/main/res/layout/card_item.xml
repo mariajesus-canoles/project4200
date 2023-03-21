@@ -28,9 +28,8 @@
         <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#3F51B5"
-            app:columnCount="3"
-            app:rowCount="1">
+            android:background="#3F51B5">
+
 
             <LinearLayout
                 android:layout_width="80dp"
