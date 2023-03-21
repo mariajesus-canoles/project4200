@@ -3,42 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="75dp"
+        android:layout_height="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <!--<GridLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="4"
+        android:columnCount="2"
+        android:background="#3F51B5"
+        tools:context=".MainActivity">
+
+    </GridLayout>-->
+
+        <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView_title"
-            app:layout_constraintStart_toEndOf="@+id/textView_title">
+            android:background="#3F51B5"
+            app:columnCount="3"
+            app:rowCount="1">
 
-            <TextView
-                android:id="@+id/textView_title"
-                android:layout_width="0dp"
-                android:layout_height="75dp"
-                android:text="title"
-                android:textSize="20sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView_date_time"
-                app:layout_constraintEnd_toStartOf="@+id/textView_date_time"
-                app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView_date_time"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:text="date and time"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView_title"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="62dp"
+                    android:layout_height="54dp"
+                    android:layout_weight="1"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView_const_string"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="days left"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </androidx.gridlayout.widget.GridLayout>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

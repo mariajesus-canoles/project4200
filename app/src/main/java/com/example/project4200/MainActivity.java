@@ -15,10 +15,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             appointmentList.add(new Appointment(1, "Vacation in Quebec", "Quebec",
                     LocalDateTime.of(LocalDate.now(), LocalTime.now())));
+
+            appointmentList.add(new Appointment(1, "Vacation in BC", "BC",
+                    LocalDateTime.of(LocalDate.now(), LocalTime.now())));
             appointmentList.add(new Appointment(1, "Vacation in Manitoba", "Winnipeg",
                     LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.now().plusHours(6))));
-            appointmentList.add(new Appointment(1, "Vacation in Quebec", "Quebec",
-                    LocalDateTime.of(LocalDate.now(), LocalTime.now())));
         }
 
         //ArrayList<Appointment> appointmentList = DBHelper.getInfoAsList(); would be easiest!
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                intent.putExtra("state", 0);
                 startActivity(intent);
             }
 
