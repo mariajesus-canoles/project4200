@@ -1,12 +1,16 @@
 package com.example.project4200;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.os.HandlerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,13 +20,25 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
+    MyAdapter myAdapter;
+    DataBase db;
+     ExecutorService executorService = Executors.newSingleThreadExecutor();
+     Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
 
 
-
+    /**
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,22 +49,42 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        ArrayList<Appointment> appointmentList = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            appointmentList.add(new Appointment(1, "Vacation in Quebec", "Quebec",
-                    LocalDateTime.of(LocalDate.now(), LocalTime.now())));
+        db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
+                "event_db").fallbackToDestructiveMigration().build();
 
-            appointmentList.add(new Appointment(1, "Vacation in BC", "BC",
-                    LocalDateTime.of(LocalDate.now(), LocalTime.now())));
-            appointmentList.add(new Appointment(1, "Vacation in Manitoba", "Winnipeg",
-                    LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.now().plusHours(6))));
-        }
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                         myAdapter = new MyAdapter(eventList, MainActivity.this);
+                        recyclerView.setAdapter(myAdapter);
 
-        //ArrayList<Appointment> appointmentList = DBHelper.getInfoAsList(); would be easiest!
+                    }
+                });
+            }
+        });
 
-        MyAdapter adapter = new MyAdapter(appointmentList, MainActivity.this);
-        recyclerView.setAdapter(adapter);
+        /*ArrayList<Event> eventList2 = new ArrayList<>();
+        Event event;
+        event = new Event();
+        event.setTitle("Vacation in Vancouver");
+        event.setTime("End of April");
+        eventList2.add(event);
+        Event event2 = new Event();
+        event2.setTitle("Banff National Park");
+        event2.setTime("May to June");
+        eventList2.add(event2);
+        myAdapter = new MyAdapter(eventList2, MainActivity.this);
+        recyclerView.setAdapter(myAdapter);*/
 
+
+
+        /**
+         *
+         */
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,8 +92,24 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("state", 0);
                 startActivity(intent);
             }
+        });
+    }
 
+    protected void onResume() {
+        super.onResume();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        myAdapter = new MyAdapter(eventList, MainActivity.this);
+                        recyclerView.setAdapter(myAdapter);
 
+                    }
+                });
+            }
         });
     }
 }
