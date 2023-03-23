@@ -20,6 +20,8 @@ public class Event {
     private String description;
     @ColumnInfo(name = "place")
     private String place;
+    @ColumnInfo(name = "date")
+    private String date;
     @ColumnInfo(name = "time")
     private String time;
     @ColumnInfo(name = "picture_id")
@@ -40,6 +42,10 @@ public class Event {
 
     public String getPlace() {
         return place;
+    }
+        
+    public String getDate() {
+        return date;
     }
 
     public String getTime() {
@@ -65,6 +71,10 @@ public class Event {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+        
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setTime(String time) {
