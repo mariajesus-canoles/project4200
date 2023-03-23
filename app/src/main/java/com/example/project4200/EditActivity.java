@@ -1,12 +1,15 @@
 package com.example.project4200;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.os.HandlerCompat;
 import androidx.room.Room;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,6 +21,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -26,7 +31,8 @@ public class EditActivity extends AppCompatActivity {
     Button save, back, select_date, select_time;
     int mYear, mMonth, mDay, mHour, mMinute;
     DataBase db;
-
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +56,7 @@ public class EditActivity extends AppCompatActivity {
 //        db.getReadableDatabase();
 
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
-                "countdowntimer.db").fallbackToDestructiveMigration().build();
+                "countdowntimer.db").allowMainThreadQueries().build();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +121,6 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (check == 0) {  // add new to db
-                    Event event = new Event();
 
                     String t = title.getText().toString();
                     String d = des.getText().toString();
@@ -123,24 +128,33 @@ public class EditActivity extends AppCompatActivity {
                     String ti = time.getText().toString();
                     String p = place.getText().toString();
 
+                    Picture picture = new Picture();
+                    picture.setName("picture_name");
+                    Event event = new Event();
                     event.setTitle(t);
                     event.setDescription(d);
-                    event.setTime(ti);
                     event.setPlace(p);
-                    event.setPicture_id(10);
+                    event.setTime(ti);
+                    executorService.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            long l1 = db.allDAO().insertPicture(picture);
+                            Picture picture = db.allDAO().getPictureByName("picture_name");
+                            event.setPicture_id(picture.getId());
+                            long l2 = db.allDAO().insertEvent(event);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(l2 > 0 ){
+                                        Toast.makeText(EditActivity.this, "The value inserted!", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(EditActivity.this, "The value insertion failed!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
 
-                    long l =  db.allDAO().insertEvent(event);
-                    if (l<0) {
-                        Toast.makeText(EditActivity.this, "Error - Add value", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(EditActivity.this, "Event added!", Toast.LENGTH_SHORT).show();
-                        title.setText("");
-                        des.setText("");
-                        time.setText("");
-                        place.setText("");
-                    }
-                    startActivity(intent);
                 }
                 else if (check == 1) {  // save to db
 
