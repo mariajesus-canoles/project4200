@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
-                "event_db").fallbackToDestructiveMigration().build();
+                "countdowntimer.db").fallbackToDestructiveMigration().build();
 
         executorService.execute(new Runnable() {
             @Override
