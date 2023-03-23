@@ -150,6 +150,7 @@ public class EditActivity extends AppCompatActivity {
                                     }else{
                                         Toast.makeText(EditActivity.this, "The value insertion failed!", Toast.LENGTH_SHORT).show();
                                     }
+                                    startActivity(intent);
                                 }
                             });
                         }
