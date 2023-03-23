@@ -1,6 +1,7 @@
 package com.example.project4200;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -24,6 +25,7 @@ public class EditActivity extends AppCompatActivity {
     Spinner icons;
     Button save, back, select_date, select_time;
     int mYear, mMonth, mDay, mHour, mMinute;
+    DataBase db;
 
 
     @Override
@@ -44,8 +46,11 @@ public class EditActivity extends AppCompatActivity {
         select_date = findViewById(R.id.btn_date);
         select_time = findViewById(R.id.btn_time);
 
-        DBHelper db = new DBHelper(getApplicationContext());
-        db.getReadableDatabase();
+//        DBHelper db = new DBHelper(getApplicationContext());
+//        db.getReadableDatabase();
+
+        db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
+                "countdowntimer.db").fallbackToDestructiveMigration().build();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,11 +115,21 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (check == 0) {  // add new to db
+                    Event event = new Event();
+
                     String t = title.getText().toString();
                     String d = des.getText().toString();
+                    String da = date.getText().toString();
                     String ti = time.getText().toString();
                     String p = place.getText().toString();
-                    long l =  db.createDataTable1(t, d, p, ti, 1L);
+
+                    event.setTitle(t);
+                    event.setDescription(d);
+                    event.setTime(ti);
+                    event.setPlace(p);
+                    event.setPicture_id(10);
+
+                    long l =  db.allDAO().insertEvent(event);
                     if (l<0) {
                         Toast.makeText(EditActivity.this, "Error - Add value", Toast.LENGTH_SHORT).show();
                     }
