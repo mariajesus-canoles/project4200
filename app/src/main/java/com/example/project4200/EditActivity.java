@@ -122,19 +122,20 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (check == 0) {  // add new to db
 
-                    String t = title.getText().toString();
-                    String d = des.getText().toString();
-                    String da = date.getText().toString();
-                    String ti = time.getText().toString();
-                    String p = place.getText().toString();
+                    String in_title = title.getText().toString();
+                    String in_des = des.getText().toString();
+                    String in_date = date.getText().toString();
+                    String in_time = time.getText().toString();
+                    String in_place = place.getText().toString();
 
                     Picture picture = new Picture();
                     picture.setName("picture_name");
                     Event event = new Event();
-                    event.setTitle(t);
-                    event.setDescription(d);
-                    event.setPlace(p);
-                    event.setTime(ti);
+                    event.setTitle(in_title);
+                    event.setDescription(in_des);
+                    event.setPlace(in_place);
+                    event.setDate(in_date);
+                    event.setTime(in_time);
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
