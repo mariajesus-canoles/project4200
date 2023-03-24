@@ -82,8 +82,21 @@ public class EditActivity extends AppCompatActivity {
 
         Intent get = getIntent();
 //        int check = get.getIntExtra("state", 0);
-        int check = 0;
-
+        int check = 1;
+        if (check == 1) {
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Event event = db.allDAO().getEventById(1);
+                    title.setText(event.getTitle());
+                    des.setText(event.getDescription());
+                    date.setText(event.getDate());
+                    time.setText(event.getTime());
+                    place.setText(event.getPlace());
+                    icons.setSelection(adapter.getPosition("none"));
+                }
+            });
+        }
 //        Select date
         select_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,31 +144,30 @@ public class EditActivity extends AppCompatActivity {
                 String in_date = date.getText().toString();
                 String in_time = time.getText().toString();
                 String in_place = place.getText().toString();
+                String in_icon = icons.getSelectedItem().toString();
 
-                Picture picture = new Picture();
-                picture.setName("picture_name");
+                Picture picture = db.allDAO().getPictureByName(in_icon);
                 Event event = new Event();
                 event.setTitle(in_title);
                 event.setDescription(in_des);
                 event.setPlace(in_place);
                 event.setDate(in_date);
                 event.setTime(in_time);
+//                event.setPicture_id(picture.getId());
+                event.setPicture_id(1);
 
                 if (check == 0) {  // add new to db
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
-                            long l1 = db.allDAO().insertPicture(picture);
-                            Picture picture = db.allDAO().getPictureByName("picture_name");
-                            event.setPicture_id(picture.getId());
                             long l2 = db.allDAO().insertEvent(event);
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(l2 > 0 ){
-                                        Toast.makeText(EditActivity.this, "The value inserted!", Toast.LENGTH_SHORT).show();
+                                    if(l2 > 0){
+                                        Toast.makeText(EditActivity.this, "Event added!", Toast.LENGTH_SHORT).show();
                                     }else{
-                                        Toast.makeText(EditActivity.this, "The value insertion failed!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditActivity.this, "Event insertion failed!", Toast.LENGTH_SHORT).show();
                                     }
                                     startActivity(intent);
                                 }
@@ -165,25 +177,26 @@ public class EditActivity extends AppCompatActivity {
 
                 }
                 else if (check == 1) {  // save to db
-//                    executorService.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Picture picture = db.allDAO().getPictureByName("picture_name");
-//                            event.setPicture_id(picture.getId());
-//                            long l2 = db.allDAO().updateEvent(event);
-//                            handler.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    if(l2 > 0 ){
-//                                        Toast.makeText(EditActivity.this, "The value inserted!", Toast.LENGTH_SHORT).show();
-//                                    }else{
-//                                        Toast.makeText(EditActivity.this, "The value insertion failed!", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                    startActivity(intent);
-//                                }
-//                            });
-//                        }
-//                    });
+                    executorService.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Picture picture = db.allDAO().getPictureByName("picture_name");
+                            event.setPicture_id(picture.getId());
+//                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, picture.getId(), 1);
+                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, 1, 1);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(l2 == 1){
+                                        Toast.makeText(EditActivity.this, "Event is updated!", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(EditActivity.this, "Event updated failed!", Toast.LENGTH_SHORT).show();
+                                    }
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    });
                 }
                 else {
                     Toast.makeText(EditActivity.this, "An error has occurred -_- Please try again.", Toast.LENGTH_SHORT).show();
