@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,7 +27,8 @@ import java.util.concurrent.Executors;
 
 public class EditActivity extends AppCompatActivity {
 
-    EditText title, des, date, time, place;
+    EditText title, des, place;
+    TextView date, time;
     Spinner icons;
     Button save, back, select_date, select_time;
     int mYear, mMonth, mDay, mHour, mMinute;
@@ -46,8 +48,8 @@ public class EditActivity extends AppCompatActivity {
         icons = findViewById(R.id.spinner);
         save = findViewById(R.id.btn_save);
         back = findViewById(R.id.btn_back);
-        date = findViewById(R.id.edit_date);
-        time = findViewById((R.id.edit_time));
+        date = findViewById(R.id.date);
+        time = findViewById((R.id.time));
         place = findViewById(R.id.edit_place);
         select_date = findViewById(R.id.btn_date);
         select_time = findViewById(R.id.btn_time);
@@ -79,8 +81,10 @@ public class EditActivity extends AppCompatActivity {
 //        Get from database: title, des, list of icon
 
         Intent get = getIntent();
-        int check = get.getIntExtra("state", 0);
+//        int check = get.getIntExtra("state", 0);
+        int check = 0;
 
+//        Select date
         select_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +103,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
+//        Select time
         select_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,25 +122,26 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
+//        Save
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String in_title = title.getText().toString();
+                String in_des = des.getText().toString();
+                String in_date = date.getText().toString();
+                String in_time = time.getText().toString();
+                String in_place = place.getText().toString();
+
+                Picture picture = new Picture();
+                picture.setName("picture_name");
+                Event event = new Event();
+                event.setTitle(in_title);
+                event.setDescription(in_des);
+                event.setPlace(in_place);
+                event.setDate(in_date);
+                event.setTime(in_time);
+
                 if (check == 0) {  // add new to db
-
-                    String in_title = title.getText().toString();
-                    String in_des = des.getText().toString();
-                    String in_date = date.getText().toString();
-                    String in_time = time.getText().toString();
-                    String in_place = place.getText().toString();
-
-                    Picture picture = new Picture();
-                    picture.setName("picture_name");
-                    Event event = new Event();
-                    event.setTitle(in_title);
-                    event.setDescription(in_des);
-                    event.setPlace(in_place);
-                    event.setDate(in_date);
-                    event.setTime(in_time);
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
@@ -159,7 +165,25 @@ public class EditActivity extends AppCompatActivity {
 
                 }
                 else if (check == 1) {  // save to db
-
+//                    executorService.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Picture picture = db.allDAO().getPictureByName("picture_name");
+//                            event.setPicture_id(picture.getId());
+//                            long l2 = db.allDAO().updateEvent(event);
+//                            handler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    if(l2 > 0 ){
+//                                        Toast.makeText(EditActivity.this, "The value inserted!", Toast.LENGTH_SHORT).show();
+//                                    }else{
+//                                        Toast.makeText(EditActivity.this, "The value insertion failed!", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                    startActivity(intent);
+//                                }
+//                            });
+//                        }
+//                    });
                 }
                 else {
                     Toast.makeText(EditActivity.this, "An error has occurred -_- Please try again.", Toast.LENGTH_SHORT).show();
