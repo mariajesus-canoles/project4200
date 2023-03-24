@@ -4,29 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     tools:context=".EditActivity">
-
-    <EditText
-        android:id="@+id/edit_time"
-        android:layout_width="270dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="Time"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_date" />
 
     <Button
         android:id="@+id/btn_time"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:text="Select"
-        app:layout_constraintStart_toEndOf="@+id/edit_time"
-        app:layout_constraintTop_toBottomOf="@+id/edit_date" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:text="Select Time"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/time"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <EditText
         android:id="@+id/edit_title"
@@ -36,6 +26,7 @@
         android:ems="10"
         android:hint="Title"
         android:inputType="textPersonName"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +40,7 @@
         android:ems="10"
         android:hint="More context"
         android:inputType="textPersonName"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +59,8 @@
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="383dp"
-        android:layout_height="0dp"
+        android:layout_width="386dp"
+        android:layout_height="42dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.392"
@@ -86,18 +78,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edit_date"
-        android:layout_width="270dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Date"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_des" />
-
-    <EditText
         android:id="@+id/edit_place"
         android:layout_width="383dp"
         android:layout_height="50dp"
@@ -105,19 +85,45 @@
         android:ems="10"
         android:hint="Place"
         android:inputType="textPersonName"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_time" />
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
     <Button
         android:id="@+id/btn_date"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:text="Select Date"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/date"
+        app:layout_constraintTop_toBottomOf="@+id/edit_des" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Select"
-        app:layout_constraintStart_toEndOf="@+id/edit_date"
+        android:gravity="center|left"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center|left"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_des" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
