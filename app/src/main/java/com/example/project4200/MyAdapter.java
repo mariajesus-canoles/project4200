@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.content.Intent;
@@ -31,6 +32,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private Context context;
     private ArrayList<Event> eventList;
+    RecyclerView recyclerView;
 
     /**
      *
@@ -98,27 +100,37 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
 
         int tmp = 0;
+        int tmp2 = 0;
         switch(position % 6) {
             case 0:
                 tmp = ContextCompat.getColor(context, R.color._1light_grey);
+                tmp2 = ContextCompat.getColor(context, R.color._7peach);
                 break;
             case 1:
                 tmp = ContextCompat.getColor(context, R.color._2sky_blue);
+                tmp2 = ContextCompat.getColor(context, R.color._8peach);
                 break;
             case 2:
                 tmp = ContextCompat.getColor(context, R.color._3seafoam_green);
+                tmp2 = ContextCompat.getColor(context, R.color._9peach);
                 break;
             case 3:
                 tmp = ContextCompat.getColor(context, R.color._4lavender);
+                tmp2 = ContextCompat.getColor(context, R.color._10peach);
                 break;
             case 4:
                 tmp = ContextCompat.getColor(context, R.color._5pale_pink);
+                tmp2 = ContextCompat.getColor(context, R.color._11peach);
                 break;
             case 5:
                 tmp = ContextCompat.getColor(context, R.color._6peach);
+                tmp2 = ContextCompat.getColor(context, R.color._12peach);
                 break;
         }
         holder.cardView.setCardBackgroundColor(tmp);
+        holder.linearLayout.setBackgroundColor(tmp2);
+
+
 
 
 
@@ -158,6 +170,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         TextView const_string;
         CardView cardView;
         ImageView imageView;
+        LinearLayout linearLayout;
 
 
         /**
@@ -172,6 +185,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             days = itemView.findViewById(R.id.textView_days);
             imageView = itemView.findViewById(R.id.imageView);
             const_string = itemView.findViewById(R.id.textView_const_string);
+            linearLayout = itemView.findViewById(R.id.linearLayout_days_left);
         }
 
     }

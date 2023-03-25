@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        CustomItemDecorator itemDecorator = new CustomItemDecorator(10);
+        recyclerView.addItemDecoration(itemDecorator);
+
+
         /*ArrayList<Event> eventList2 = new ArrayList<>();
         Event event;
         event = new Event();

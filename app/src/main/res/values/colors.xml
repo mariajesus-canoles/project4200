@@ -9,12 +9,20 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="_1light_grey">#6117B4</color>
-    <color name="_2sky_blue">#87ceeb</color>
-    <color name="_3seafoam_green">#98fb98</color>
-    <color name="_4lavender">#e6e6fa</color>
-    <color name="_5pale_pink">#ffe6e6</color>
-    <color name="_6peach">#ffe5b4</color>
+    <color name="_1light_grey">#E9D634 </color>
+    <color name="_2sky_blue">#EE9734 </color>
+    <color name="_3seafoam_green">#34EE7D</color>
+    <color name="_4lavender">#34ADEE</color>
+    <color name="_5pale_pink">#CA70F3 </color>
+    <color name="_6peach">#F37070 </color>
+
+    <color name="_7peach">#D4C226</color>
+    <color name="_8peach">#D58626</color>
+    <color name="_9peach">#2ED964</color>
+    <color name="_10peach">#2B87C0</color>
+    <color name="_11peach">#B95EDC</color>
+    <color name="_12peach">#E05D5D</color>
+
 
 
 
