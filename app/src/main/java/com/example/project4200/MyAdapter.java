@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.content.Intent;
@@ -15,16 +16,23 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private Context context;
     private ArrayList<Event> eventList;
+    RecyclerView recyclerView;
 
     /**
      *
@@ -64,15 +72,77 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getTime());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            holder.days.setText("(to fix) " + event.getTime());
+        String[] date_elements = event.getDate().split("-");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+
+
+        if(date_elements.length == 3) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date event_date;
+            try {
+                 event_date = dateFormat.parse(event.getDate());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Date now = new Date();
+            long diffInMillis = event_date.getTime() - now.getTime();
+            long daysBetween = diffInMillis / (1000 * 60 * 60 * 24);
+            holder.days.setText(Long.toString(daysBetween));
+            holder.date.setText(now.toString());
+            holder.title.setText(event_date.toString());
+
+
+        }else {
+            holder.const_string.setText("");
+            holder.date.setText("");
+            holder.days.setText("");
         }
+
+        int tmp = 0;
+        int tmp2 = 0;
+        switch(position % 6) {
+            case 0:
+                tmp = ContextCompat.getColor(context, R.color._1light_grey);
+                tmp2 = ContextCompat.getColor(context, R.color._7peach);
+                break;
+            case 1:
+                tmp = ContextCompat.getColor(context, R.color._2sky_blue);
+                tmp2 = ContextCompat.getColor(context, R.color._8peach);
+                break;
+            case 2:
+                tmp = ContextCompat.getColor(context, R.color._3seafoam_green);
+                tmp2 = ContextCompat.getColor(context, R.color._9peach);
+                break;
+            case 3:
+                tmp = ContextCompat.getColor(context, R.color._4lavender);
+                tmp2 = ContextCompat.getColor(context, R.color._10peach);
+                break;
+            case 4:
+                tmp = ContextCompat.getColor(context, R.color._5pale_pink);
+                tmp2 = ContextCompat.getColor(context, R.color._11peach);
+                break;
+            case 5:
+                tmp = ContextCompat.getColor(context, R.color._6peach);
+                tmp2 = ContextCompat.getColor(context, R.color._12peach);
+                break;
+        }
+        holder.cardView.setCardBackgroundColor(tmp);
+        holder.linearLayout.setBackgroundColor(tmp2);
+
+
+
+
+
+
+
 
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewActivity.class);
+                intent.putExtra("id", event.getId());
                 //TODO is that correct?
                 startActivity(context, intent, null);
 
@@ -97,8 +167,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         TextView title;
         TextView date;
         TextView days;
+        TextView const_string;
         CardView cardView;
         ImageView imageView;
+        LinearLayout linearLayout;
 
 
         /**
@@ -112,7 +184,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             cardView = itemView.findViewById(R.id.cardView);
             days = itemView.findViewById(R.id.textView_days);
             imageView = itemView.findViewById(R.id.imageView);
+            const_string = itemView.findViewById(R.id.textView_const_string);
+            linearLayout = itemView.findViewById(R.id.linearLayout_days_left);
         }
 
     }
+
+
 }

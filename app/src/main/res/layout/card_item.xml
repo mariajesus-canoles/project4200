@@ -9,6 +9,7 @@
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="80dp"
+        app:cardBackgroundColor="#2196F3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,8 +28,7 @@
 
         <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#3F51B5">
+            android:layout_height="match_parent">
 
 
             <LinearLayout
@@ -53,23 +53,30 @@
                 <TextView
                     android:id="@+id/textView_title"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:paddingBottom="10dp"
                     android:text="TextView"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView_title"
                     android:layout_weight="1"
                     android:text="TextView"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/linearLayout_days_left"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
@@ -78,14 +85,19 @@
                     android:id="@+id/textView_days"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="TextView"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView_const_string"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="days left"
+                    android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>
 
