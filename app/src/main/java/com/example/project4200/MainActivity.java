@@ -52,9 +52,14 @@ public class MainActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
                 "countdowntimer.db").allowMainThreadQueries().build();
 
+        /*Picture p = new Picture();
+        p.setId(1);
+        p.setName("testPicture");*/
+
         executorService.execute(new Runnable() {
             @Override
             public void run() {
+                //db.allDAO().insertPicture(p);
                 ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
                 handler.post(new Runnable() {
                     @Override
