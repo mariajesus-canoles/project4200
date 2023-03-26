@@ -25,8 +25,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
@@ -60,6 +62,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return new MyViewHolder(view);
     }
 
+    public void onItemDismiss(int position) {
+        eventList.remove(position);
+
+        notifyDataSetChanged();
+    }
+
     /**
      *
      * @param holder The ViewHolder which should be updated to represent the contents of the
@@ -89,14 +97,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             long diffInMillis = event_date.getTime() - now.getTime();
             long daysBetween = diffInMillis / (1000 * 60 * 60 * 24);
             holder.days.setText(Long.toString(daysBetween));
-            holder.date.setText(now.toString());
-            holder.title.setText(event_date.toString());
 
-
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
+            String formattedDate = dateFormat2.format(event_date);
+            holder.date.setText(formattedDate);
         }else {
             holder.const_string.setText("");
             holder.date.setText("");
-            holder.days.setText("");
+            holder.days.setText("-");
         }
 
         int tmp = 0;
