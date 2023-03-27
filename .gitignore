@@ -15,3 +15,5 @@
 .cxx
 local.properties
 build.gradle
+.idea/gradle.xml
+app/build.gradle
