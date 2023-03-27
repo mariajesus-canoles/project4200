@@ -43,8 +43,8 @@ public interface AllDAO{
     @Update
     int updateEvent(Event event);
     
-    @Query("UPDATE table_event SET title=:title, description=:description, place=:place, date=:date, time=:time, picture_id=:picture_id WHERE table_event.id=:id")
-    int updateEventById(String title, String description, String place, String date, String time, int picture_id, int id);
+    @Query("UPDATE table_event SET title=:title, description=:description, place=:place, date=:date, time=:time, picture_name=:picture_name WHERE table_event.id=:id")
+    int updateEventById(String title, String description, String place, String date, String time, String picture_name, int id);
 
     @Query("SELECT * FROM table_event WHERE table_event.id=:id")
     Event getEventById(int id);

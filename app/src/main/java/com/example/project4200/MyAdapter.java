@@ -3,6 +3,7 @@ package com.example.project4200;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
@@ -79,6 +81,35 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Event event = eventList.get(position);
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getTime());
+
+        // HashMap to bind drawable image with name
+        HashMap<String, Integer> images = new HashMap<String, Integer>();
+        images.put("calendar", Integer.valueOf(R.drawable.calendar));
+        images.put("airplane_landing", Integer.valueOf(R.drawable.airplane_landing));
+        images.put("airplane_take_off", Integer.valueOf(R.drawable.airplane_take_off));
+        images.put("alarm", Integer.valueOf(R.drawable.alarm));
+        images.put("beach", Integer.valueOf(R.drawable.beach));
+        images.put("birthday", Integer.valueOf(R.drawable.birthday));
+        images.put("booking", Integer.valueOf(R.drawable.booking));
+        images.put("bow_cupid", Integer.valueOf(R.drawable.bow_cupid));
+        images.put("camping", Integer.valueOf(R.drawable.camping));
+        images.put("christmas_tree", Integer.valueOf(R.drawable.christmas_tree));
+        images.put("christmas_wreath", Integer.valueOf(R.drawable.christmas_wreath));
+        images.put("confetti", Integer.valueOf(R.drawable.confetti));
+        images.put("easter_egg", Integer.valueOf(R.drawable.easter_egg));
+        images.put("easter_eggs", Integer.valueOf(R.drawable.easter_eggs));
+        images.put("firework_explosion", Integer.valueOf(R.drawable.firework_explosion));
+        images.put("flowers", Integer.valueOf(R.drawable.flowers));
+        images.put("ghost", Integer.valueOf(R.drawable.ghost));
+        images.put("gift", Integer.valueOf(R.drawable.gift));
+        images.put("gingerbread_man", Integer.valueOf(R.drawable.gingerbread_man));
+        images.put("jackolantern", Integer.valueOf(R.drawable.jackolantern));
+        images.put("music_festival", Integer.valueOf(R.drawable.music_festival));
+        images.put("pay", Integer.valueOf(R.drawable.pay));
+        images.put("shopping_basket", Integer.valueOf(R.drawable.shopping_basket));
+        images.put("trailer", Integer.valueOf(R.drawable.trailer));
+
+        holder.imageView.setImageResource(images.get(event.getPicture_name()).intValue());
 
         String[] date_elements = event.getDate().split("-");
         Calendar c = Calendar.getInstance();

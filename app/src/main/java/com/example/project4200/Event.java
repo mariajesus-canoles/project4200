@@ -5,11 +5,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "table_event",
-        foreignKeys = {@ForeignKey(entity = Picture.class,
-                parentColumns = "id",
-                childColumns = "picture_id",
-                onDelete = ForeignKey.CASCADE)})
+@Entity(tableName = "table_event")
 public class Event {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -24,8 +20,8 @@ public class Event {
     private String date;
     @ColumnInfo(name = "time")
     private String time;
-    @ColumnInfo(name = "picture_id")
-    private int picture_id;
+    @ColumnInfo(name = "picture_name")
+    private String picture_name;
 
 
 
@@ -52,8 +48,8 @@ public class Event {
         return time;
     }
 
-    public int getPicture_id() {
-        return picture_id;
+    public String getPicture_name() {
+        return picture_name;
     }
 
 
@@ -81,7 +77,7 @@ public class Event {
         this.time = time;
     }
 
-    public void setPicture_id(int picture_id) {
-        this.picture_id = picture_id;
+    public void setPicture_name(String picture_name) {
+        this.picture_name = picture_name;
     }
 }

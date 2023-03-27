@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,7 +22,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,7 +44,7 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        Intent intent = new Intent(EditActivity.this, MainActivity.class);
+        Intent intent_main = new Intent(EditActivity.this, MainActivity.class);
 
         title = findViewById(R.id.edit_title);
         des = findViewById(R.id.edit_des);
@@ -54,35 +57,35 @@ public class EditActivity extends AppCompatActivity {
         select_date = findViewById(R.id.btn_date);
         select_time = findViewById(R.id.btn_time);
 
-//        DBHelper db = new DBHelper(getApplicationContext());
-//        db.getReadableDatabase();
+//
+        db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "countdowntimer.db").allowMainThreadQueries().build();
 
-        db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
-                "countdowntimer.db").allowMainThreadQueries().build();
+        final List<String> img_icons = Arrays.asList("calendar","airplane_landing","airplane_take_off",
+                "alarm","beach","birthday","booking","bow_cupid","camping","christmas_tree","christmas_wreath",
+                "confetti","easter_egg","easter_eggs","firework_explosion","flowers","ghost","gift",
+                "gingerbread_man","jackolantern","music_festival","pay","shopping_basket","trailer");
+        SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), img_icons);
+        adapter.setDropDownViewResource(R.layout.dropdown);
+        //  Set the spinners adapter to the previously created one.
+        icons.setAdapter(adapter);
 
-        back.setOnClickListener(new View.OnClickListener() {
+        icons.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(intent);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(EditActivity.this, "seled   "+icons.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
-        //create a list of items for the spinner.
-        ArrayList<String> items = new ArrayList<String>();
-        items.add("1");
-        items.add("22");
-        items.add("333");
-//        Create an adapter to describe how the items are displayed, adapters are used in several places in android.
-//        There are multiple variations of this, but this is the basic variant.
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-//        Set the spinners adapter to the previously created one.
-        icons.setAdapter(adapter);
-
-//        Get from database: title, des, list of icon
-
+        //  Get from database: title, des, list of icon
         Intent get = getIntent();
-//        int check = get.getIntExtra("state", 0);
-        int check = 1;
+        int check = get.getIntExtra("state", 0);
+//        int check = 1;
+        //  Get event info if is editing event
         if (check == 1) {
             executorService.execute(new Runnable() {
                 @Override
@@ -93,11 +96,20 @@ public class EditActivity extends AppCompatActivity {
                     date.setText(event.getDate());
                     time.setText(event.getTime());
                     place.setText(event.getPlace());
-                    icons.setSelection(adapter.getPosition("none"));
+//                    icons.setSelection();
                 }
             });
         }
-//        Select date
+
+        //  Back
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent_main);
+            }
+        });
+
+        //  Select date
         select_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +128,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
-//        Select time
+        //  Select time
         select_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +136,7 @@ public class EditActivity extends AppCompatActivity {
                 mHour = c.get(Calendar.HOUR_OF_DAY);
                 mMinute = c.get(Calendar.MINUTE);
 
-                // Launch Time Picker Dialog
+                //  Launch Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(EditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -135,7 +147,7 @@ public class EditActivity extends AppCompatActivity {
             }
         });
 
-//        Save
+        //  Save
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,15 +158,13 @@ public class EditActivity extends AppCompatActivity {
                 String in_place = place.getText().toString();
                 String in_icon = icons.getSelectedItem().toString();
 
-                Picture picture = db.allDAO().getPictureByName(in_icon);
                 Event event = new Event();
                 event.setTitle(in_title);
                 event.setDescription(in_des);
                 event.setPlace(in_place);
                 event.setDate(in_date);
                 event.setTime(in_time);
-//                event.setPicture_id(picture.getId());
-                event.setPicture_id(1);
+                event.setPicture_name(in_icon);
 
                 if (check == 0) {  // add new to db
                     executorService.execute(new Runnable() {
@@ -169,7 +179,7 @@ public class EditActivity extends AppCompatActivity {
                                     }else{
                                         Toast.makeText(EditActivity.this, "Event insertion failed!", Toast.LENGTH_SHORT).show();
                                     }
-                                    startActivity(intent);
+                                    startActivity(intent_main);
                                 }
                             });
                         }
@@ -181,9 +191,9 @@ public class EditActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Picture picture = db.allDAO().getPictureByName("picture_name");
-                            event.setPicture_id(picture.getId());
+                            event.setPicture_name("d");
 //                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, picture.getId(), 1);
-                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, 1, 1);
+                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, "ds", 1);
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -192,7 +202,7 @@ public class EditActivity extends AppCompatActivity {
                                     }else{
                                         Toast.makeText(EditActivity.this, "Event updated failed!", Toast.LENGTH_SHORT).show();
                                     }
-                                    startActivity(intent);
+                                    startActivity(intent_main);
                                 }
                             });
                         }
@@ -200,7 +210,7 @@ public class EditActivity extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(EditActivity.this, "An error has occurred -_- Please try again.", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
+                    startActivity(intent_main);
                 }
             }
         });
