@@ -11,25 +11,7 @@ import java.util.List;
 
 @Dao
 public interface AllDAO{
-    //----- PICTURE -----
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertPicture(Picture picture);
-
-    @Query("SELECT * FROM table_picture")
-    List<Picture> getAllPictures();
-
-    @Delete
-    int deletePicture(Picture picture);
-
-    @Update
-    int updatePicture(Picture picture);
-
-    @Query("SELECT * FROM table_picture WHERE table_picture.id=:id")
-    Picture getPictureById(int id);
-
-    @Query("SELECT * FROM table_picture WHERE table_picture.name=:name")
-    Picture getPictureByName(String name);
-
+    
     //------ EVENT ------
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertEvent(Event event);

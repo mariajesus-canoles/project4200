@@ -190,10 +190,7 @@ public class EditActivity extends AppCompatActivity {
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
-                            Picture picture = db.allDAO().getPictureByName("picture_name");
-                            event.setPicture_name("d");
-//                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, picture.getId(), 1);
-                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, "ds", 1);
+                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, in_icon, 1);
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
