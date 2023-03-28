@@ -18,11 +18,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -37,13 +34,6 @@ public class MainActivity extends AppCompatActivity {
      Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
 
 
-    /**
-     *
-     * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,14 +47,10 @@ public class MainActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class,
                 "countdowntimer.db").allowMainThreadQueries().build();
 
-        /*Picture p = new Picture();
-        p.setId(1);
-        p.setName("testPicture");*/
 
         executorService.execute(new Runnable() {
             @Override
             public void run() {
-                //db.allDAO().insertPicture(p);
                 ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     eventList.sort(new Comparator<Event>() {
@@ -121,14 +107,6 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
                         db.allDAO().deleteEvent(eventList.get(position));
-                       /* handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                myAdapter = new MyAdapter(eventList, MainActivity.this);
-                                recyclerView.setAdapter(myAdapter);
-
-                            }
-                        });*/
                     }
                 });
             }
@@ -138,9 +116,6 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 
-        /**
-         *
-         */
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,21 +126,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*protected void onResume() {
-        super.onResume();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        myAdapter = new MyAdapter(eventList, MainActivity.this);
-                        recyclerView.setAdapter(myAdapter);
-
-                    }
-                });
-            }
-        });
-    }*/
 }
