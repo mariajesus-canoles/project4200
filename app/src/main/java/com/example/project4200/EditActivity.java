@@ -57,7 +57,6 @@ public class EditActivity extends AppCompatActivity {
         des = findViewById(R.id.edit_des);
         icons = findViewById(R.id.spinner);
         save = findViewById(R.id.btn_save);
-//        back = findViewById(R.id.btn_back);
         date = findViewById(R.id.date);
         time = findViewById((R.id.time));
         place = findViewById(R.id.edit_place);
@@ -73,13 +72,12 @@ public class EditActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.back_arrow);
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
-//
+
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "countdowntimer.db").allowMainThreadQueries().build();
 
-        final List<String> img_icons = Arrays.asList("calendar","airplane_landing","airplane_take_off",
-                "alarm","beach","birthday","booking","bow_cupid","camping","christmas_tree","christmas_wreath",
-                "confetti","easter_egg","easter_eggs","firework_explosion","flowers","ghost","gift",
-                "gingerbread_man","jackolantern","music_festival","pay","shopping_basket","trailer");
+        final List<String> img_icons = Arrays.asList("calendar","alarm","beach","birthday",
+                "bow_cupid","camping","christmas_tree","confetti","easter_egg",
+                "firework_explosion","gingerbread_man","jackolantern","music_festival");
         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), img_icons);
         adapter.setDropDownViewResource(R.layout.dropdown);
         //  Set the spinners adapter to the previously created one.
@@ -176,14 +174,6 @@ public class EditActivity extends AppCompatActivity {
             });
         }
 
-        //  Back
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(intent_main);
-//            }
-//        });
-
         //  Select date
         select_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,11 +265,8 @@ public class EditActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
                 String formattedDate2 = dateFormat2.format(globalCal.getTime());
                 event.setTime(formattedDate2);
-
                 event.setPicture_name(in_icon);
 
-                //String in_date = event.getDate();
-                //String in_time = event.getTime();
 
                 if (check == 0) {  // add new to db
                     executorService.execute(new Runnable() {
