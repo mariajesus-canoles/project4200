@@ -112,7 +112,7 @@ public class EditActivity extends AppCompatActivity {
                     des.setText(event.getDescription());
 
                     place.setText(event.getPlace());
-                    icons.setSelection(1);
+                    icons.setSelection(img_icons.indexOf(event.getPicture_name()));
 
                     String[] date_elements = event.getDate().split("-");
                     String[] time_elements = event.getTime().split(":");
