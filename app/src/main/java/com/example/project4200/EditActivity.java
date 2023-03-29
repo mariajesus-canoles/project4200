@@ -41,7 +41,7 @@ public class EditActivity extends AppCompatActivity {
     TextView date, time;
     Spinner icons;
     Button save, select_date, select_time;
-    int mYear, mMonth, mDay, mHour, mMinute;
+    int mYear, mMonth, mDay, mHour=-1, mMinute;
     DataBase db;
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
@@ -249,7 +249,7 @@ public class EditActivity extends AppCompatActivity {
 
                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
                 String formattedDate2 = dateFormat2.format(globalCal.getTime());
-                if (mHour == 0) {
+                if (mHour == -1) {
                     in_time = "empty";
                     event.setTime("empty");
                 }
