@@ -100,8 +100,8 @@ public class EditActivity extends AppCompatActivity {
         //  Get from database: title, des, list of icon
         Intent get = getIntent();
         int check = get.getIntExtra("state", 0);
-        int id = get.getIntExtra("id", -1);
-//        int check = 1;
+        int id = get.getIntExtra("id", 0);
+
         //  Get event info if is editing event
         if (check == 1) {
             executorService.execute(new Runnable() {
@@ -110,14 +110,21 @@ public class EditActivity extends AppCompatActivity {
                     Event event = db.allDAO().getEventById(id);
                     title.setText(event.getTitle());
                     des.setText(event.getDescription());
-                    date.setText(event.getDate());
-                    time.setText(event.getTime());
-                    place.setText(event.getPlace());
-//                    icons.setSelection();
 
+                    place.setText(event.getPlace());
+                    icons.setSelection(1);
 
                     String[] date_elements = event.getDate().split("-");
                     String[] time_elements = event.getTime().split(":");
+
+                    date.setText(event.getDate());
+                    time.setText(event.getTime());
+
+                    mYear = Integer.parseInt(date_elements[2]);
+                    mMonth = Integer.parseInt(date_elements[1]);
+                    mDay = Integer.parseInt(date_elements[0]);
+                    mHour = Integer.parseInt(time_elements[0]);
+                    mMinute = Integer.parseInt(time_elements[1]);
 
                     if (date_elements.length == 3) {
                         Calendar countdownDate = Calendar.getInstance();
@@ -188,8 +195,6 @@ public class EditActivity extends AppCompatActivity {
                 mDay = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener() {
 
-                    String month = "";
-
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         Calendar cal = Calendar.getInstance(); //-------------------------------------------------------------------------------------
@@ -206,50 +211,9 @@ public class EditActivity extends AppCompatActivity {
                         String formattedDate2 = dateFormat2.format(cal.getTime());
                         date.setText(formattedDate2); //-------------bis hier------------------------
 
-
-                        switch (monthOfYear+1) {
-                            case 1:
-                                month = "Jan";
-                                break;
-                            case 2:
-                                month = "Feb";
-                                break;
-                            case 3:
-                                month = "Mar";
-                                break;
-                            case 4:
-                                month = "Apr";
-                                break;
-                            case 5:
-                                month = "May";
-                                break;
-                            case 6:
-                                month = "Jun";
-                                break;
-                            case 7:
-                                month = "Jul";
-                                break;
-                            case 8:
-                                month = "Aug";
-                                break;
-                            case 9:
-                                month = "Sep";
-                                break;
-                            case 10:
-                                month = "Oct";
-                                break;
-                            case 11:
-                                month = "Nov";
-                                break;
-                            case 12:
-                                month = "Dec";
-                                break;
-
-                        }
-                        mMonth = monthOfYear;
+                        mMonth = monthOfYear+1;
                         mDay = dayOfMonth;
                         mYear = year;
-                        date.setText(month + " " + dayOfMonth + " " + ", " + year);
                     }
                     }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -280,39 +244,8 @@ public class EditActivity extends AppCompatActivity {
                         String formattedDate = dateFormat3.format(cal.getTime());
                         time.setText(formattedDate); //- bis hier -------------------------------
 
-
-                        if (hourOfDay > 12) {
-                            int temp = hourOfDay-12;
-                            if (temp < 10) {
-                                h = "0"+temp;
-                            }
-                            else {
-                                h = Integer.toString(temp);
-                            }
-                            ap = "pm";
-                        }
-                        else if (hourOfDay == 12) {
-                            h = Integer.toString(hourOfDay);
-                            ap = "pm";
-                        }
-                        else {
-                            if (hourOfDay < 10) {
-                                h = "0"+hourOfDay;
-                            }
-                            else {
-                                h = Integer.toString(hourOfDay);
-                            }
-                            ap = "am";
-                        }
-                        if (minute < 10) {
-                            m = "0"+minute;
-                        }
-                        else {
-                            m = Integer.toString(minute);
-                        }
                         mMinute = minute;
                         mHour = hourOfDay;
-                        time.setText(h + ":" + m + " " + ap);
                     }
                     }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -324,8 +257,8 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String in_title = title.getText().toString();
-                String in_des = des.getText().toString();
-                String in_date = (mDay + "-" + (mMonth + 1) + "-" + mYear);
+                String in_des = (des.getText().toString() != "") ? des.getText().toString() : "9999";
+                String in_date = (mDay + "-" + (mMonth) + "-" + mYear);
                 String in_time = (mHour + ":" + mMinute);
                 String in_place = place.getText().toString();
                 String in_icon = icons.getSelectedItem().toString();
