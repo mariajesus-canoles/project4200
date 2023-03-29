@@ -53,31 +53,25 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    eventList.sort(new Comparator<Event>() {
-                        @Override
-                        public int compare(Event o1, Event o2) {
-                            String[] date_elements = o1.getDate().split("-");
-                            String[] date_elements2 = o2.getDate().split("-");
+                    eventList.sort((o1, o2) -> {
+                        String[] date_elements = o1.getDate().split("-");
+                        String[] date_elements2 = o2.getDate().split("-");
 
-                            if (date_elements.length == 3 && date_elements2.length == 3) {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                                Date event_date, event_date2;
-
-                                try {
-                                    event_date = dateFormat.parse(o1.getDate());
-                                    event_date2 = dateFormat.parse(o2.getDate());
-                                } catch (ParseException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                                return event_date.compareTo(event_date2);
-
+                        if (date_elements.length == 3 && date_elements2.length == 3) {
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            Date event_date, event_date2;
+                            try {
+                                event_date = dateFormat.parse(o1.getDate());
+                                event_date2 = dateFormat.parse(o2.getDate());
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
                             }
-                            return -1;
-
+                            return event_date.compareTo(event_date2);
                         }
+                        return -1;
                     });
                 }
+
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -91,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         CustomItemDecorator itemDecorator = new CustomItemDecorator(10);
         recyclerView.addItemDecoration(itemDecorator);
 
-
         ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -102,12 +95,9 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 myAdapter.onItemDismiss(position);
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
-                        db.allDAO().deleteEvent(eventList.get(position));
-                    }
+                executorService.execute(() -> {
+                    ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
+                    db.allDAO().deleteEvent(eventList.get(position));
                 });
             }
         };
@@ -116,13 +106,10 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra("state", 0);
-                startActivity(intent);
-            }
+        floatingActionButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, EditActivity.class);
+            intent.putExtra("state", 0);
+            startActivity(intent);
         });
     }
 

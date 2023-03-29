@@ -45,7 +45,7 @@ public class ViewActivity extends AppCompatActivity {
     TextView tvCountdownDate, tvCountdownTimer;
     TextView textView_title, textView_description, textView_place;
 
-    Button btnBack, btnEdit;
+    Button btnEdit;
     ImageView imageView;
 
     DataBase db;
@@ -53,16 +53,12 @@ public class ViewActivity extends AppCompatActivity {
     Handler handler = HandlerCompat.createAsync(Looper.getMainLooper());
     String date = "", time = "", picture_name = "";
 
-    int countdownId;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
 
-        btnBack = findViewById(R.id.backBtn);
         btnEdit = findViewById(R.id.editBtn);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
@@ -102,8 +98,6 @@ public class ViewActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-
-
                         // HashMap to bind drawable image with name
                         HashMap<String, Integer> images = new HashMap<String, Integer>();
                         images.put("calendar", Integer.valueOf(R.drawable.calendar));
@@ -133,55 +127,28 @@ public class ViewActivity extends AppCompatActivity {
 
                         imageView.setImageResource(images.get(event.getPicture_name()).intValue());
 
-
-
                         String[] date_elements = date.split("-");
                         String[] time_elements = time.split(":");
 
                         if (date_elements.length == 3) {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                            Date event_date;
-                            try {
-                                event_date = dateFormat.parse(date);
-                            } catch (ParseException e) {
-                                throw new RuntimeException(e);
-                            }
-
                             Calendar countdownDate = Calendar.getInstance();
-
+                            SimpleDateFormat dateFormat;
+                            String formattedDate;
+                            countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                            countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                            countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
                             if (time_elements.length == 2) {
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
-                                Date event_time;
-                                Calendar cal;
-                                try {
-                                    event_time = timeFormat.parse(time);
-                                } catch (ParseException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                                countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
-                                countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
-                                countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
-
                                 countdownDate.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
                                 countdownDate.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
 
-                                SimpleDateFormat dateFormat3 = new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a");
-                                String formattedDate = dateFormat3.format(countdownDate.getTime());
-                                tvCountdownDate.setText("Countdown to: " + formattedDate);
-
+                                dateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a");
+                                formattedDate = dateFormat.format(countdownDate.getTime());
 
                             } else {
-                                countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
-                                countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) -1);
-                                countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
-
-                                SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
-
-                                String formattedDate2 = dateFormat2.format(countdownDate.getTime());
-                                tvCountdownDate.setText("Countdown to: " + formattedDate2);
-
+                                dateFormat = new SimpleDateFormat("EEE, MMMM dd, yyyy");
+                                formattedDate = dateFormat.format(countdownDate.getTime());
                             }
+                            tvCountdownDate.setText("Countdown to: " + formattedDate);
 
 
                             new CountDownTimer(countdownDate.getTimeInMillis() - System.currentTimeMillis(), 1000) {
@@ -206,7 +173,7 @@ public class ViewActivity extends AppCompatActivity {
                             }.start();
 
                         } else {
-                            tvCountdownDate.setText("Date and time unknown");
+                            tvCountdownDate.setText("Date and time not specified");
 
                         }
                     }
@@ -214,15 +181,6 @@ public class ViewActivity extends AppCompatActivity {
 
             }
         });
-
-//        btnBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ViewActivity.this, MainActivity.class);
-//                intent.putExtra("state", 0);
-//                startActivity(intent);
-//            }
-//        });
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

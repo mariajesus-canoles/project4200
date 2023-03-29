@@ -28,7 +28,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private Context context;
     private ArrayList<Event> eventList;
-    RecyclerView recyclerView;
 
     public MyAdapter(ArrayList<Event> eventList, Context context) {
         this.eventList = eventList;
@@ -144,7 +143,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewActivity.class);
                 intent.putExtra("id", event.getId());
-                //TODO is that correct?
                 startActivity(context, intent, null);
             }
         });
