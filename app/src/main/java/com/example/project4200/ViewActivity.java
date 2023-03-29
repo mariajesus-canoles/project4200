@@ -135,16 +135,6 @@ public class ViewActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-
                         String[] date_elements = date.split("-");
                         String[] time_elements = time.split(":");
 

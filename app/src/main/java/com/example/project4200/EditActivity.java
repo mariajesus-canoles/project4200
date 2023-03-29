@@ -345,8 +345,8 @@ public class EditActivity extends AppCompatActivity {
 
                 event.setPicture_name(in_icon);
 
-                String in_date = event.getDate();
-                String in_time = event.getTime();
+                //String in_date = event.getDate();
+                //String in_time = event.getTime();
 
                 if (check == 0) {  // add new to db
                     executorService.execute(new Runnable() {
