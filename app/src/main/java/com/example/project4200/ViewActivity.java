@@ -125,55 +125,67 @@ public class ViewActivity extends AppCompatActivity {
                         images.put("shopping_basket", Integer.valueOf(R.drawable.shopping_basket));
                         images.put("trailer", Integer.valueOf(R.drawable.trailer));
 
-                        imageView.setImageResource(images.get(event.getPicture_name()).intValue());
+                        try {
+                            imageView.setImageResource(images.get(event.getPicture_name()).intValue());
+                        }catch(NullPointerException npe) {
+                            imageView.setImageResource((images.get("booking")));
+                        }
 
-                        String[] date_elements = date.split("-");
-                        String[] time_elements = time.split(":");
 
-                        if (date_elements.length == 3) {
-                            Calendar countdownDate = Calendar.getInstance();
-                            SimpleDateFormat dateFormat;
-                            String formattedDate;
-                            countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
-                            countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
-                            countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
-                            if (time_elements.length == 2) {
-                                countdownDate.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
-                                countdownDate.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
 
-                                dateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a");
-                                formattedDate = dateFormat.format(countdownDate.getTime());
+                        if(date != null && time != null) {
+                            String[] date_elements = date.split("-");
+                            String[] time_elements = time.split(":");
+
+                            if (date_elements.length == 3) {
+                                Calendar countdownDate = Calendar.getInstance();
+                                SimpleDateFormat dateFormat;
+                                String formattedDate;
+                                countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                                countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                                countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+                                if (time_elements.length == 2) {
+                                    countdownDate.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
+                                    countdownDate.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
+
+                                    dateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a");
+                                    formattedDate = dateFormat.format(countdownDate.getTime());
+
+                                } else {
+                                    dateFormat = new SimpleDateFormat("EEE, MMMM dd, yyyy");
+                                    formattedDate = dateFormat.format(countdownDate.getTime());
+                                }
+                                tvCountdownDate.setText("Countdown to: " + formattedDate);
+
+
+                                new CountDownTimer(countdownDate.getTimeInMillis() - System.currentTimeMillis(), 1000) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                        long days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished);
+                                        millisUntilFinished -= TimeUnit.DAYS.toMillis(days);
+                                        long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
+                                        millisUntilFinished -= TimeUnit.HOURS.toMillis(hours);
+                                        long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished);
+                                        millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes);
+                                        long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
+
+                                        String countdown = String.format(Locale.getDefault(), "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
+                                        tvCountdownTimer.setText(countdown);
+                                    }
+
+                                    @Override
+                                    public void onFinish() {
+                                        tvCountdownTimer.setText("Countdown finished!");
+                                    }
+                                }.start();
 
                             } else {
-                                dateFormat = new SimpleDateFormat("EEE, MMMM dd, yyyy");
-                                formattedDate = dateFormat.format(countdownDate.getTime());
+                                tvCountdownDate.setText("Date and time not specified");
+
                             }
-                            tvCountdownDate.setText("Countdown to: " + formattedDate);
-
-
-                            new CountDownTimer(countdownDate.getTimeInMillis() - System.currentTimeMillis(), 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                    long days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished);
-                                    millisUntilFinished -= TimeUnit.DAYS.toMillis(days);
-                                    long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
-                                    millisUntilFinished -= TimeUnit.HOURS.toMillis(hours);
-                                    long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished);
-                                    millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes);
-                                    long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
-
-                                    String countdown = String.format(Locale.getDefault(), "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
-                                    tvCountdownTimer.setText(countdown);
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    tvCountdownTimer.setText("Countdown finished!");
-                                }
-                            }.start();
-
-                        } else {
+                        }else {
                             tvCountdownDate.setText("Date and time not specified");
+
 
                         }
                     }

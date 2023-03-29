@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -20,7 +19,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,23 +52,29 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     eventList.sort((o1, o2) -> {
-                        String[] date_elements = o1.getDate().split("-");
-                        String[] date_elements2 = o2.getDate().split("-");
+                        if(o1.getDate() != (null) && o2.getDate() !=(null)) {
+                            String[] date_elements = o1.getDate().split("-");
+                            String[] date_elements2 = o2.getDate().split("-");
 
-                        if (date_elements.length == 3 && date_elements2.length == 3) {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                            Date event_date, event_date2;
-                            try {
-                                event_date = dateFormat.parse(o1.getDate());
-                                event_date2 = dateFormat.parse(o2.getDate());
-                            } catch (ParseException e) {
-                                throw new RuntimeException(e);
+                            if (date_elements.length == 3 && date_elements2.length == 3) {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                Date event_date, event_date2;
+                                try {
+                                    event_date = dateFormat.parse(o1.getDate());
+                                    event_date2 = dateFormat.parse(o2.getDate());
+                                } catch (ParseException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return event_date.compareTo(event_date2);
                             }
-                            return event_date.compareTo(event_date2);
+                            return -1;
                         }
-                        return -1;
+                        else {
+                            return -1;
+                        }
                     });
                 }
+
 
                 handler.post(new Runnable() {
                     @Override

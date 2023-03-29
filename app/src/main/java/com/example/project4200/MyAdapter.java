@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,32 +80,43 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         images.put("shopping_basket", Integer.valueOf(R.drawable.shopping_basket));
         images.put("trailer", Integer.valueOf(R.drawable.trailer));
 
-        holder.imageView.setImageResource(images.get(event.getPicture_name()).intValue());
+        try {
+            holder.imageView.setImageResource(images.get(event.getPicture_name()));
+        }catch(NullPointerException npe) {
+            holder.imageView.setImageResource(images.get("booking"));
+        }
 
-        String[] date_elements = event.getDate().split("-");
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
+        if(event.getDate() != null) {
+            String[] date_elements = event.getDate().split("-");
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date());
 
-        if(date_elements.length == 3) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            Date event_date;
-            try {
-                 event_date = dateFormat.parse(event.getDate());
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
+            if (date_elements.length == 3) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Date event_date;
+                try {
+                    event_date = dateFormat.parse(event.getDate());
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                Date now = new Date();
+                long diffInMillis = event_date.getTime() - now.getTime();
+                long daysBetween = diffInMillis / (1000 * 60 * 60 * 24);
+                holder.days.setText(Long.toString(daysBetween));
+
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
+                String formattedDate = dateFormat2.format(event_date);
+                holder.date.setText(formattedDate);
+            } else {
+                holder.const_string.setText("");
+                holder.date.setText("");
+                holder.days.setText("-");
             }
-            Date now = new Date();
-            long diffInMillis = event_date.getTime() - now.getTime();
-            long daysBetween = diffInMillis / (1000 * 60 * 60 * 24);
-            holder.days.setText(Long.toString(daysBetween));
-
-            SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
-            String formattedDate = dateFormat2.format(event_date);
-            holder.date.setText(formattedDate);
         }else {
             holder.const_string.setText("");
             holder.date.setText("");
             holder.days.setText("-");
+
         }
 
         int tmp = 0;
