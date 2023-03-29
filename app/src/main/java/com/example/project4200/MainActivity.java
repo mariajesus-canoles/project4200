@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     eventList.sort((o1, o2) -> {
-                        if(o1.getDate() != (null) && o2.getDate() !=(null)) {
+                        if(o1.getDate() != ("null") && o2.getDate() !=("null")) {
                             String[] date_elements = o1.getDate().split("-");
                             String[] date_elements2 = o2.getDate().split("-");
 

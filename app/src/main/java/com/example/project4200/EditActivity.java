@@ -112,62 +112,52 @@ public class EditActivity extends AppCompatActivity {
                     place.setText(event.getPlace());
                     icons.setSelection(img_icons.indexOf(event.getPicture_name()));
 
-                    String[] date_elements = event.getDate().split("-");
-                    String[] time_elements = event.getTime().split(":");
+                    Calendar countdownDate = Calendar.getInstance();
+                    if (event.getDate() != "null") {
 
-                    date.setText(event.getDate());
-                    time.setText(event.getTime());
+                        String[] date_elements = event.getDate().split("-");
 
-                    mYear = Integer.parseInt(date_elements[2]);
-                    mMonth = Integer.parseInt(date_elements[1]);
-                    mDay = Integer.parseInt(date_elements[0]);
-                    mHour = Integer.parseInt(time_elements[0]);
-                    mMinute = Integer.parseInt(time_elements[1]);
+                        date.setText(event.getDate());
 
-                    if (date_elements.length == 3) {
-                        Calendar countdownDate = Calendar.getInstance();
-
-                        if (time_elements.length == 2) {
+                        if (date_elements.length == 3) {
+                            mYear = Integer.parseInt(date_elements[2]);
+                            mMonth = Integer.parseInt(date_elements[1]);
+                            mDay = Integer.parseInt(date_elements[0]);
 
                             countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
                             countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
                             countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+
+                            globalCal.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                            globalCal.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                            globalCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+
+                            SimpleDateFormat dateFormat3 = new SimpleDateFormat("EEE, MMM dd, yyyy");
+
+                            String formattedDate = dateFormat3.format(countdownDate.getTime());
+
+                            date.setText(formattedDate);
+
+                        }
+                    }
+                    if (event.getTime() != "null") {
+
+                        String[] time_elements = event.getTime().split(":");
+                        time.setText(event.getTime());
+
+                        if (time_elements.length == 2) {
+                            mHour = Integer.parseInt(time_elements[0]);
+                            mMinute = Integer.parseInt(time_elements[1]);
 
                             countdownDate.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
                             countdownDate.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
 
-                            globalCal.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
-                            globalCal.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
-                            globalCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
-
                             globalCal.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
                             globalCal.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
 
-                            SimpleDateFormat dateFormat3 = new SimpleDateFormat("EEE, MMM dd, yyyy");
                             SimpleDateFormat dateFormat4 = new SimpleDateFormat("hh:mm a");
-
-                            String formattedDate = dateFormat3.format(countdownDate.getTime());
                             String formattedDate2 = dateFormat4.format(countdownDate.getTime());
-
-                            date.setText(formattedDate);
                             time.setText(formattedDate2);
-
-
-                        } else {
-                            countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
-                            countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
-                            countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
-
-                            globalCal.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
-                            globalCal.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
-                            globalCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
-
-                            SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
-
-                            String formattedDate2 = dateFormat2.format(countdownDate.getTime());
-                            date.setText(formattedDate2);
-                            time.setText("-");
-
                         }
                     }
                 }
@@ -248,8 +238,8 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String in_title = title.getText().toString();
                 String in_des = (des.getText().toString() != "") ? des.getText().toString() : "9999";
-                String in_date = (mDay + "-" + (mMonth) + "-" + mYear);
-                String in_time = (mHour + ":" + mMinute);
+                String in_date;
+                String in_time;
                 String in_place = place.getText().toString();
                 String in_icon = icons.getSelectedItem().toString();
 
@@ -260,11 +250,25 @@ public class EditActivity extends AppCompatActivity {
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String formattedDate = dateFormat.format(globalCal.getTime());
-                event.setDate(formattedDate);
+                if (mYear == 0) {
+                    in_date = "null";
+                    event.setDate("null");
+                }
+                else {
+                    event.setDate(formattedDate);
+                    in_date = (mDay + "-" + (mMonth) + "-" + mYear);
+                }
 
                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
                 String formattedDate2 = dateFormat2.format(globalCal.getTime());
-                event.setTime(formattedDate2);
+                if (mHour == 0) {
+                    in_time = "null";
+                    event.setTime("null");
+                }
+                else {
+                    event.setTime(formattedDate2);
+                    in_time = (mHour + ":" + mMinute);
+                }
                 event.setPicture_name(in_icon);
 
 
