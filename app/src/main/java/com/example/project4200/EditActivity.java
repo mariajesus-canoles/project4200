@@ -219,7 +219,7 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String in_title = title.getText().toString();
-                String in_des = (des.getText().toString() != "") ? des.getText().toString() : "9999";
+                String in_des = des.getText().toString();
                 String in_date;
                 String in_time;
                 String in_place = place.getText().toString();
