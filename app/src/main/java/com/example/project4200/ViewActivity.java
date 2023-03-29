@@ -1,5 +1,7 @@
 package com.example.project4200;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -8,7 +10,8 @@ import android.os.Bundle;
 
         import android.os.Bundle;
         import android.os.CountDownTimer;
-        import android.widget.TextView;
+import android.view.MenuItem;
+import android.widget.TextView;
 
         import java.text.DateFormat;
         import java.util.Calendar;
@@ -20,10 +23,21 @@ public class ViewActivity extends AppCompatActivity {
     private TextView tvCountdownDate;
     private TextView tvCountdownTimer;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+
+        // Customize the back button
+        actionBar.setHomeAsUpIndicator(R.drawable.back_arrow);
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         tvCountdownDate = findViewById(R.id.tv_countdown_date);
         tvCountdownTimer = findViewById(R.id.tv_countdown_timer);
@@ -59,5 +73,17 @@ public class ViewActivity extends AppCompatActivity {
                 tvCountdownTimer.setText("Countdown finished!");
             }
         }.start();
+    }
+
+    // this event will enable the back
+    // function to the button on press
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
