@@ -215,14 +215,14 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewActivity.this, MainActivity.class);
-                intent.putExtra("state", 0);
-                startActivity(intent);
-            }
-        });
+//        btnBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ViewActivity.this, MainActivity.class);
+//                intent.putExtra("state", 0);
+//                startActivity(intent);
+//            }
+//        });
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
