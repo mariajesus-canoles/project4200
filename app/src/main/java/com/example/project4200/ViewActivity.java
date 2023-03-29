@@ -1,5 +1,7 @@
 package com.example.project4200;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -28,6 +30,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+        import android.os.Bundle;
+        import android.os.CountDownTimer;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+        import java.text.DateFormat;
+        import java.util.Calendar;
+        import java.util.Locale;
+        import java.util.concurrent.TimeUnit;
 
 public class ViewActivity extends AppCompatActivity {
 
@@ -44,6 +55,8 @@ public class ViewActivity extends AppCompatActivity {
 
     int countdownId;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +64,15 @@ public class ViewActivity extends AppCompatActivity {
 
         btnBack = findViewById(R.id.backBtn);
         btnEdit = findViewById(R.id.editBtn);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+
+        // Customize the back button
+        actionBar.setHomeAsUpIndicator(R.drawable.back_arrow);
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         tvCountdownDate = findViewById(R.id.tv_countdown_date);
         tvCountdownTimer = findViewById(R.id.tv_countdown_timer);
         textView_title = findViewById(R.id.textView_title2);
@@ -221,5 +243,17 @@ public class ViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // this event will enable the back
+    // function to the button on press
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
