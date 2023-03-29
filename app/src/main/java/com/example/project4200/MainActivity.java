@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                 return event_date.compareTo(event_date2);
 
                             }
-                            return 0;
+                            return -1;
 
                         }
                     });

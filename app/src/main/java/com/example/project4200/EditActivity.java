@@ -21,9 +21,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,6 +60,7 @@ public class EditActivity extends AppCompatActivity {
         select_date = findViewById(R.id.btn_date);
         select_time = findViewById(R.id.btn_time);
 
+        Calendar globalCal = Calendar.getInstance();
 //
         db = Room.databaseBuilder(getApplicationContext(), DataBase.class, "countdowntimer.db").allowMainThreadQueries().build();
 
@@ -84,19 +88,71 @@ public class EditActivity extends AppCompatActivity {
         //  Get from database: title, des, list of icon
         Intent get = getIntent();
         int check = get.getIntExtra("state", 0);
+        int id = get.getIntExtra("id", -1);
 //        int check = 1;
         //  Get event info if is editing event
         if (check == 1) {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    Event event = db.allDAO().getEventById(1);
+                    Event event = db.allDAO().getEventById(id);
                     title.setText(event.getTitle());
                     des.setText(event.getDescription());
                     date.setText(event.getDate());
                     time.setText(event.getTime());
                     place.setText(event.getPlace());
 //                    icons.setSelection();
+
+
+                    String[] date_elements = event.getDate().split("-");
+                    String[] time_elements = event.getTime().split(":");
+
+                    if (date_elements.length == 3) {
+                        Calendar countdownDate = Calendar.getInstance();
+
+                        if (time_elements.length == 2) {
+
+                            countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                            countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                            countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+
+                            countdownDate.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
+                            countdownDate.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
+
+                            globalCal.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                            globalCal.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                            globalCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+
+                            globalCal.set(Calendar.HOUR, Integer.parseInt(time_elements[0]));
+                            globalCal.set(Calendar.MINUTE, Integer.parseInt(time_elements[1]));
+
+                            SimpleDateFormat dateFormat3 = new SimpleDateFormat("EEE, MMM dd, yyyy");
+                            SimpleDateFormat dateFormat4 = new SimpleDateFormat("hh:mm a");
+
+                            String formattedDate = dateFormat3.format(countdownDate.getTime());
+                            String formattedDate2 = dateFormat4.format(countdownDate.getTime());
+
+                            date.setText(formattedDate);
+                            time.setText(formattedDate2);
+
+
+                        } else {
+                            countdownDate.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                            countdownDate.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                            countdownDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+
+                            globalCal.set(Calendar.YEAR, Integer.parseInt(date_elements[2]));
+                            globalCal.set(Calendar.MONTH, Integer.parseInt(date_elements[1]) - 1);
+                            globalCal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(date_elements[0]));
+
+                            SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
+
+                            String formattedDate2 = dateFormat2.format(countdownDate.getTime());
+                            date.setText(formattedDate2);
+                            time.setText("-");
+
+                        }
+                    }
                 }
             });
         }
@@ -121,7 +177,21 @@ public class EditActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(EditActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.YEAR, year);
+                        cal.set(Calendar.MONTH, monthOfYear);
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        globalCal.set(Calendar.YEAR, year);
+                        globalCal.set(Calendar.MONTH, monthOfYear);
+                        globalCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
+
+                        String formattedDate2 = dateFormat2.format(cal.getTime());
+                        date.setText(formattedDate2);
+
+
                     }
                     }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -140,7 +210,17 @@ public class EditActivity extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(EditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        time.setText(hourOfDay + ":" + minute);
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.HOUR, hourOfDay);
+                        cal.set(Calendar.MINUTE, minute);
+
+                        globalCal.set(Calendar.HOUR, hourOfDay);
+                        globalCal.set(Calendar.MINUTE, minute);
+
+                        SimpleDateFormat dateFormat3 = new SimpleDateFormat("hh:mm a");
+                        String formattedDate = dateFormat3.format(cal.getTime());
+                        time.setText(formattedDate);
+
                     }
                     }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -153,8 +233,6 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String in_title = title.getText().toString();
                 String in_des = des.getText().toString();
-                String in_date = date.getText().toString();
-                String in_time = time.getText().toString();
                 String in_place = place.getText().toString();
                 String in_icon = icons.getSelectedItem().toString();
 
@@ -162,9 +240,19 @@ public class EditActivity extends AppCompatActivity {
                 event.setTitle(in_title);
                 event.setDescription(in_des);
                 event.setPlace(in_place);
-                event.setDate(in_date);
-                event.setTime(in_time);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                String formattedDate = dateFormat.format(globalCal.getTime());
+                event.setDate(formattedDate);
+
+                SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
+                String formattedDate2 = dateFormat2.format(globalCal.getTime());
+                event.setTime(formattedDate2);
+
                 event.setPicture_name(in_icon);
+
+                String in_date = event.getDate();
+                String in_time = event.getTime();
 
                 if (check == 0) {  // add new to db
                     executorService.execute(new Runnable() {
@@ -190,7 +278,7 @@ public class EditActivity extends AppCompatActivity {
                     executorService.execute(new Runnable() {
                         @Override
                         public void run() {
-                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, in_icon, 1);
+                            int l2 = db.allDAO().updateEventById(in_title, in_des, in_place, in_date, in_time, in_icon, id);
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
