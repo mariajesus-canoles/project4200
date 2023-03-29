@@ -83,18 +83,6 @@ public class EditActivity extends AppCompatActivity {
         //  Set the spinners adapter to the previously created one.
         icons.setAdapter(adapter);
 
-        icons.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(EditActivity.this, "seled   "+icons.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         //  Get from database: title, des, list of icon
         Intent get = getIntent();
         int check = get.getIntExtra("state", 0);
@@ -113,7 +101,7 @@ public class EditActivity extends AppCompatActivity {
                     icons.setSelection(img_icons.indexOf(event.getPicture_name()));
 
                     Calendar countdownDate = Calendar.getInstance();
-                    if (event.getDate() != "null") {
+                    if (event.getDate() != "empty") {
 
                         String[] date_elements = event.getDate().split("-");
 
@@ -140,7 +128,7 @@ public class EditActivity extends AppCompatActivity {
 
                         }
                     }
-                    if (event.getTime() != "null") {
+                    if (event.getTime() != "empty") {
 
                         String[] time_elements = event.getTime().split(":");
                         time.setText(event.getTime());
@@ -251,8 +239,8 @@ public class EditActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 String formattedDate = dateFormat.format(globalCal.getTime());
                 if (mYear == 0) {
-                    in_date = "null";
-                    event.setDate("null");
+                    in_date = "empty";
+                    event.setDate("empty");
                 }
                 else {
                     event.setDate(formattedDate);
@@ -262,8 +250,8 @@ public class EditActivity extends AppCompatActivity {
                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("hh:mm");
                 String formattedDate2 = dateFormat2.format(globalCal.getTime());
                 if (mHour == 0) {
-                    in_time = "null";
-                    event.setTime("null");
+                    in_time = "empty";
+                    event.setTime("empty");
                 }
                 else {
                     event.setTime(formattedDate2);
