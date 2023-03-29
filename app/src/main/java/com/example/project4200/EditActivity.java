@@ -14,8 +14,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,13 +22,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -165,7 +159,7 @@ public class EditActivity extends AppCompatActivity {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar cal = Calendar.getInstance(); //-------------------------------------------------------------------------------------
+                        Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.YEAR, year);
                         cal.set(Calendar.MONTH, monthOfYear);
                         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -177,7 +171,7 @@ public class EditActivity extends AppCompatActivity {
                         SimpleDateFormat dateFormat2 = new SimpleDateFormat("EEE, MMMM dd, yyyy");
 
                         String formattedDate2 = dateFormat2.format(cal.getTime());
-                        date.setText(formattedDate2); //-------------bis hier------------------------
+                        date.setText(formattedDate2);
 
                         mMonth = monthOfYear+1;
                         mDay = dayOfMonth;
@@ -201,7 +195,7 @@ public class EditActivity extends AppCompatActivity {
                     String h, m, ap;
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        Calendar cal = Calendar.getInstance(); //------------------------
+                        Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.HOUR, hourOfDay);
                         cal.set(Calendar.MINUTE, minute);
 
@@ -210,7 +204,7 @@ public class EditActivity extends AppCompatActivity {
 
                         SimpleDateFormat dateFormat3 = new SimpleDateFormat("hh:mm a");
                         String formattedDate = dateFormat3.format(cal.getTime());
-                        time.setText(formattedDate); //- bis hier -------------------------------
+                        time.setText(formattedDate);
 
                         mMinute = minute;
                         mHour = hourOfDay;
