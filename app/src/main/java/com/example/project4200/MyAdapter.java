@@ -42,9 +42,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return new MyViewHolder(view);
     }
 
-    public void onItemDismiss(int position) {
-        eventList.remove(position);
+    public Event onItemDismiss(int position) {
+        Event tmp = eventList.remove(position);
         notifyDataSetChanged();
+        return tmp;
     }
 
     @Override
@@ -52,6 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Event event = eventList.get(position);
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getTime());
+        holder.id = event.getId();
 
         // HashMap to bind drawable image with name
         HashMap<String, Integer> images = new HashMap<String, Integer>();
@@ -173,7 +175,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         CardView cardView;
         ImageView imageView;
         LinearLayout linearLayout;
-
+        public int id;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textView_title);
@@ -183,6 +185,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             imageView = itemView.findViewById(R.id.imageView);
             const_string = itemView.findViewById(R.id.textView_const_string);
             linearLayout = itemView.findViewById(R.id.linearLayout_days_left);
+
+        }
+
+        public int getId() {
+            return id;
         }
     }
 }

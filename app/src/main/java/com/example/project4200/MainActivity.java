@@ -69,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                             return -1;
                         }
-                        else {
+                        else if(o1.getDate() != "empty") {
                             return -1;
+                        }else {
+                            return 1;
                         }
                     });
                 }
@@ -98,10 +100,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                myAdapter.onItemDismiss(position);
+
+
+                Event toDelete = myAdapter.onItemDismiss(position);
                 executorService.execute(() -> {
-                    ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
-                    db.allDAO().deleteEvent(eventList.get(position));
+                    //ArrayList<Event> eventList = (ArrayList<Event>) db.allDAO().getAllEvents();
+
+
+
+                    db.allDAO().deleteEvent(toDelete);
                 });
             }
         };
